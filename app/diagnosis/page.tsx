@@ -65,6 +65,11 @@ export default function DiagnosisPage() {
 
     while (attempt < maxRetries) {
       try {
+        const base64Image = preview.split(',')[1];
+        if (!base64Image) {
+          throw new Error('Invalid image format. Please upload a valid image.');
+        }
+
         const response = await fetch(`${backendUrl}/predict`, {
           method: 'POST',
           headers: {
@@ -72,7 +77,7 @@ export default function DiagnosisPage() {
             'Accept': 'application/json',
           },
           body: JSON.stringify({
-            image: preview.split(',')[1], // Remove data:image/jpeg;base64, prefix
+            image: base64Image, // Ensure this is valid
           }),
         });
 
@@ -87,14 +92,14 @@ export default function DiagnosisPage() {
         }
 
         const data = await response.json();
-        setPrediction(data.prediction);
-        setConfidence(data.confidence);
+        setPrediction(data?.prediction || 'No prediction available');
+        setConfidence(data?.confidence || 0);
         setProgress(100);
         break;
       } catch (error: any) {
         console.error(`Attempt ${attempt + 1} failed:`, error);
         attempt++;
-        
+
         if (attempt === maxRetries) {
           setPrediction(
             error.message === 'Failed to fetch' 
