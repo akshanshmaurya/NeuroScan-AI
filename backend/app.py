@@ -76,5 +76,39 @@ def predict():
         print(f"Prediction error: {str(e)}")
         return jsonify({'error': str(e)}), 500
 
+@app.route('/suggestions', methods=['POST'])
+def suggestions():
+    try:
+        data = request.get_json()
+        if not data or 'diagnosis' not in data:
+            return jsonify({'error': 'No diagnosis provided'}), 400
+
+        diagnosis = data['diagnosis']
+        # Generate suggestions based on the diagnosis
+        suggestions = {
+            "Glioma": "1. Gliomas are brain tumors that arise from glial cells.\n"
+                      "2. Symptoms: Headaches, seizures, memory loss.\n"
+                      "3. Treatments: Surgery, radiation, chemotherapy.\n"
+                      "4. Questions: What type of glioma is it? What are the treatment options?",
+            "Pituitary Tumor": "1. Pituitary tumors affect hormone production.\n"
+                               "2. Symptoms: Vision problems, hormonal imbalances.\n"
+                               "3. Treatments: Surgery, medication, radiation.\n"
+                               "4. Questions: Is the tumor affecting hormone levels? What are the risks of surgery?",
+            "No Tumor": "1. No tumor detected in the scan.\n"
+                        "2. Symptoms: N/A.\n"
+                        "3. Treatments: N/A.\n"
+                        "4. Questions: Are there other tests needed to confirm the result?",
+            "Meningioma": "1. Meningiomas are tumors that form on brain membranes.\n"
+                          "2. Symptoms: Headaches, vision changes, seizures.\n"
+                          "3. Treatments: Surgery, radiation.\n"
+                          "4. Questions: Is the tumor benign? What are the risks of treatment?"
+        }
+
+        result = suggestions.get(diagnosis, "No suggestions available for this diagnosis.")
+        return jsonify({'suggestions': result})
+    except Exception as e:
+        print(f"Suggestions error: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port=5000)

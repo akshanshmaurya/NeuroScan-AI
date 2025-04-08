@@ -17,8 +17,8 @@ export default function Home() {
 
   return (
     <div 
-      className="min-h-screen flex items-center pt-16 bg-cover bg-center" 
-      style={{ backgroundImage: "url('/Background/Screenshot 2025-03-28 144806.png')" }}
+      className="min-h-screen flex items-center pt-16 bg-cover bg-center bg-gray-100" 
+      // style={{ backgroundImage: "url('/Background/background.png')" }}
     >
       <div className="container mx-auto px-4 py-8 max-w-6xl">
         <motion.div 
@@ -68,7 +68,7 @@ export default function Home() {
               </Link>
             </motion.div>
             <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Link href="/appointment">
+              <Link href="/appointments">
                 <Button 
                   size="lg" 
                   variant="outline" 
